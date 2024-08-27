@@ -2,6 +2,7 @@ package com.MySocial.SocialApp.controller;
 
 import com.MySocial.SocialApp.models.User;
 import com.MySocial.SocialApp.repository.UserRepo;
+import com.MySocial.SocialApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -13,15 +14,13 @@ public class UserController {
     @Autowired
     UserRepo userRepo;
 
+    @Autowired
+    UserService userService;
+
     @PostMapping("/user")
     public User createUser(@RequestBody User user){
-        User newUser = new User();
-        newUser.setEmail(user.getEmail());
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setPassword(user.getPassword());
 
-        User savedUser = userRepo.save(newUser);
+        User savedUser = userService.registerUser(user);
 
         return savedUser;
     };
@@ -35,37 +34,20 @@ public class UserController {
 
     @GetMapping("/user/{id}")
     public User getUsersById(@PathVariable("id") Integer id) throws Exception {
-        //return Optional means user will be there or not available
-        Optional<User> user =  userRepo.findAllById(id);
-
-        if(user.isPresent()){
-            return user.get();
-        }
-        throw new Exception("User Not exist with userId " + id);
+       User findUser = userService.findUserById(id);
+       return findUser;
     }
 
     @PutMapping("/user/{id}")
     public User updateUserById(@PathVariable("id") Integer id, @RequestBody User user) throws Exception {
-        Optional<User> foundUser = userRepo.findAllById(id);
-        if(foundUser.isEmpty()){
-            throw new Exception("User not exist with that id " + id);
-        }
+       User updatedUser = userService.updateUser(id,user);
+       return updatedUser;
+    }
 
-        User oldUser = foundUser.get();
-
-        if(user.getFirstName() != null){
-            oldUser.setFirstName(user.getFirstName());
-        }
-        if(user.getEmail() != null){
-            oldUser.setEmail(user.getEmail());
-        }
-        if(user.getLastName() != null){
-            oldUser.setLastName(user.getLastName());
-        }
-
-        User updatedUser = userRepo.save(oldUser);
-
-        return updatedUser;
+    @PutMapping("/users/follow/{userId1}/{userId2}")
+    public User followUserHandler( @PathVariable Integer userId1 , @PathVariable Integer userId2) throws Exception {
+        User user = userService.followUser(userId1,userId2);
+        return user;
     }
 
     @DeleteMapping("user/{id}")
@@ -79,6 +61,10 @@ public class UserController {
         return "User Deleted Successfully with userId " + userId ;
     }
 
-
+    @GetMapping("/users/search")
+    public List<User> searchUser(@RequestParam("query") String query){
+        List<User> users = userService.searchUser(query);
+        return users;
+    }
 
 }

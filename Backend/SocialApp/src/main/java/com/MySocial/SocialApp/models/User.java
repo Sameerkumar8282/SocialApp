@@ -1,6 +1,10 @@
 package com.MySocial.SocialApp.models;
 
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "user_db")
@@ -9,11 +13,56 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
     private String firstName;
+
     private String lastName;
+
     private String email;
+
     private String password;
 
+    private String gender;
+
+    //null hi empty hona chia
+    private List<Integer> followers = new ArrayList<>();
+
+    private List<Integer> followings = new ArrayList<>();
+
+    public User(Integer id, List<Integer> followings, String firstName, String lastName, String email, String password, List<Integer> followers, String gender) {
+        this.id = id;
+        this.followings = followings;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.followers = followers;
+        this.gender = gender;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public List<Integer> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<Integer> followers) {
+        this.followers = followers;
+    }
+
+    public List<Integer> getFollowings() {
+        return followings;
+    }
+
+    public void setFollowings(List<Integer> followings) {
+        this.followings = followings;
+    }
 
     public User(){
 
@@ -25,14 +74,6 @@ public class User {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public User(Integer id, String firstName, String lastName, String email, String password) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
     }
 
     public String getFirstName() {
