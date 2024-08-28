@@ -29,7 +29,9 @@ public class User {
 
     private List<Integer> followings = new ArrayList<>();
 
-    public User(Integer id, List<Integer> followings, String firstName, String lastName, String email, String password, List<Integer> followers, String gender) {
+    private List<Post> savedPost = new ArrayList<>();
+
+    public User(Integer id, List<Integer> followings, String firstName, String lastName, String email, String password, List<Integer> followers, String gender, List<Post> savedPost) {
         this.id = id;
         this.followings = followings;
         this.firstName = firstName;
@@ -38,6 +40,15 @@ public class User {
         this.password = password;
         this.followers = followers;
         this.gender = gender;
+        this.savedPost = savedPost;
+    }
+
+    public List<Post> getSavedPost() {
+        return savedPost;
+    }
+
+    public void setSavedPost(List<Post> savedPost) {
+        this.savedPost = savedPost;
     }
 
     public String getGender() {
