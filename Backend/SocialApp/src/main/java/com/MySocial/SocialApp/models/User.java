@@ -1,5 +1,6 @@
 package com.MySocial.SocialApp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 
@@ -24,11 +25,13 @@ public class User {
 
     private String gender;
 
-    //null hi empty hona chia
+    //null nhi empty hona chia
     private List<Integer> followers = new ArrayList<>();
 
     private List<Integer> followings = new ArrayList<>();
 
+    @JsonIgnore
+    @ManyToMany
     private List<Post> savedPost = new ArrayList<>();
 
     public User(Integer id, List<Integer> followings, String firstName, String lastName, String email, String password, List<Integer> followers, String gender, List<Post> savedPost) {

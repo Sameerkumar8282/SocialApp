@@ -1,5 +1,6 @@
 package com.MySocial.SocialApp.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -22,8 +23,10 @@ public class Post {
 
     private String video;
 
+    @ManyToOne
     private User user;
 
+    @OneToMany
     private List<User> liked = new ArrayList<>();
 
     private LocalDate createdAt;

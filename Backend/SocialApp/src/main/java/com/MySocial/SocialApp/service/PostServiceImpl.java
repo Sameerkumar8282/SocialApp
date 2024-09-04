@@ -34,7 +34,9 @@ public class PostServiceImpl implements PostService {
         newPost.setVideo(post.getVideo());
         newPost.setUser(user);
 
-        return newPost;
+        Post posts = postRepo.save(newPost);
+
+        return posts;
     }
 
     @Override
