@@ -58,6 +58,7 @@ public class AuthController {
 
     @PostMapping("/signin")
     public AuthResponse signin(@RequestBody LoginRequest loginRequest) throws Exception {
+
         Authentication authentication = authenticate(loginRequest.getEmail(), loginRequest.getPassword());
         String token = JwtProvider.generateToken(authentication);
 

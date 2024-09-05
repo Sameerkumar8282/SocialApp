@@ -47,18 +47,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User followUser(Integer userId1, Integer userId2) throws Exception {
+    public User followUser(Integer reqUserId, Integer userId2) throws Exception {
         //follower want to follow user 2 following
-        User user1 = findUserById(userId1);
+        User reqUser = findUserById(reqUserId);
         User user2 = findUserById(userId2);
         //user 1 want ot follower user 2
-        user2.getFollowers().add(user1.getId());
-        user1.getFollowings().add(user2.getId());
+        user2.getFollowers().add(reqUser.getId());
+        reqUser.getFollowings().add(user2.getId());
 
-        userRepo.save(user1);
+        userRepo.save(reqUser);
         userRepo.save(user2);
 
-        return  user1;
+        return  reqUser;
 
     }
 
@@ -80,6 +80,9 @@ public class UserServiceImpl implements UserService {
         if(user.getLastName() != null){
             oldUser.setLastName(user.getLastName());
         }
+        if(user.getGender() != null){
+            oldUser.setGender(user.getGender());
+        }
 
         User updatedUser = userRepo.save(oldUser);
 
@@ -90,4 +93,13 @@ public class UserServiceImpl implements UserService {
     public List<User> searchUser(String query) {
         return userRepo.searchUser(query);
     }
+
+    @Override
+    public User findUserByJwt(String jwt) {
+        String email = JwtProvider.getEmailFromJwtToken(jwt);
+        User user = userRepo.findByEmail(email);
+        return user;
+    }
+
+
 }
